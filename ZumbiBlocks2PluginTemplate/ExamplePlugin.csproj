@@ -49,6 +49,13 @@
         <PackageReference Include="UnityEngine.Modules" Version="6000.2.8" IncludeAssets="compile" PrivateAssets="all"/>
     </ItemGroup>
 
+    <!-- Reference Assemblies for .NET Framework 4.7.2 or newer -->
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
     <!-- Game Assemblies -->
     <ItemGroup>
         <Reference Include="Assembly-CSharp" Private="false" Publicize="true" Strip="true">
