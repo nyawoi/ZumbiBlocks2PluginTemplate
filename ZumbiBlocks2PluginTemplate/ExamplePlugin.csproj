@@ -43,9 +43,10 @@
 
     <!-- NuGet Packages -->
     <ItemGroup>
-        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" IncludeAssets="build" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.Core" Version="5.*" IncludeAssets="compile" PrivateAssets="all"/>
-        <PackageReference Include="UnityEngine.Modules" Version="6000.0.43" IncludeAssets="compile" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" IncludeAssets="build" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.Core" Version="5.4.21" IncludeAssets="compile" PrivateAssets="all" />
+        <PackageReference Include="HarmonyX" Version="2.9.0" IncludeAssets="compile" PrivateAssets="all" />
+        <PackageReference Include="UnityEngine.Modules" Version="6000.2.8" IncludeAssets="compile" PrivateAssets="all"/>
     </ItemGroup>
 
     <!-- Game Assemblies -->
@@ -54,11 +55,14 @@
             <HintPath>$(ZumbiBlocks2_Location)\ZumbiBlocks2_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Facepunch.Steamworks" Private="false">
-                <HintPath Condition="Exists('$(SteamworksPrefix).Win32.dll')">$(SteamworksPrefix).Win32.dll</HintPath>
-                <HintPath Condition="Exists('$(SteamworksPrefix).Win64.dll')">$(SteamworksPrefix).Win64.dll</HintPath>
+            <HintPath Condition="Exists('$(SteamworksPrefix).Win32.dll')">$(SteamworksPrefix).Win32.dll</HintPath>
+            <HintPath Condition="Exists('$(SteamworksPrefix).Win64.dll')">$(SteamworksPrefix).Win64.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro" Private="false">
-                <HintPath>$(ZumbiBlocks2_Location)\ZumbiBlocks2_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <HintPath>$(ZumbiBlocks2_Location)\ZumbiBlocks2_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI" Private="false">
+            <HintPath>$(ZumbiBlocks2_Location)\ZumbiBlocks2_Data\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
     </ItemGroup>
 

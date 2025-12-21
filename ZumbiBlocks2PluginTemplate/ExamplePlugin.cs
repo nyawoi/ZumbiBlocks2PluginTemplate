@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -18,6 +17,6 @@ public class ExamplePlugin : BaseUnityPlugin
     private void Awake()
     {
         Logger = base.Logger;
-        Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PluginGUID);
+        Harmony.CreateAndPatchAll(typeof(ExamplePlugin).Assembly, PluginGUID);
     }
 }
