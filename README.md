@@ -119,3 +119,7 @@ Likewise, if you have embedded resources, create a folder named `Resources` and 
 
 If you ever get stuck or need assistance getting started, feel free to join the official [Zumbi Blocks 2 Discord Server](https://discord.gg/eCWaHR9).  
 There's a modding channel where you can share and discuss everything related to mods.
+
+## Credits
+
+- [Jötunn](https://github.com/Valheim-Modding/Jotunn) is licensed under the MIT License. See [LICENSE](https://github.com/Valheim-Modding/Jotunn/blob/dev/LICENSE) for the full License.
