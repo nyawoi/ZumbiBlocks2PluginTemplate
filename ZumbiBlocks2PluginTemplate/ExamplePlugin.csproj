@@ -23,21 +23,18 @@
 
 
     <!-- Import Template Configuration -->
-    <ItemGroup>
-        <Content Include="ExamplePlugin.csproj.user"/>
-    </ItemGroup>
+    <Import Project="ExamplePlugin.csproj.user" Condition="Exists('ExamplePlugin.csproj.user')"/>
 
     <!-- Automatic Fallback Values -->
     <PropertyGroup>
-        <!-- Default Steam install location -->
-        <DefaultSteamDir>C:\Program Files (x86)\Steam\steamapps\common\Zumbi Blocks 2 Open Alpha</DefaultSteamDir>
         <!-- If no custom install location has been set, fallback to default Steam install location -->
-        <ZumbiBlocks2_Location Condition="('$(ZumbiBlocks2_Location)' == '' Or !Exists('$(ZumbiBlocks2_Location)')) And Exists('$(DefaultSteamDir)')">$(DefaultSteamDir)</ZumbiBlocks2_Location>
+        <ZumbiBlocks2_Install_Location Condition="!Exists('$(ZumbiBlocks2_Install_Location)') AND $([MSBuild]::IsOSPlatform('Windows'))">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1941780', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</ZumbiBlocks2_Install_Location>
+        <ZumbiBlocks2_Install_Location Condition="!Exists('$(ZumbiBlocks2_Install_Location)') AND $([MSBuild]::IsOSPlatform('Windows'))">C:\Program Files (x86)\Steam\steamapps\common\Zumbi Blocks 2 Open Alpha</ZumbiBlocks2_Install_Location>
+        <ZumbiBlocks2_Install_Location Condition="!Exists('$(ZumbiBlocks2_Install_Location)') AND $([MSBuild]::IsOSPlatform('Linux'))">$(HOME)/.steam/steam/steamapps/common/Zumbi Blocks 2 Open Alpha</ZumbiBlocks2_Install_Location>
+        <!-- If no custom BepInEx location has been set, fallback to default game install location -->
+        <ZumbiBlocks2_BepInEx_Location Condition="'$(ZumbiBlocks2_BepInEx_Location)' == ''">$(ZumbiBlocks2_Install_Location)\BepInEx</ZumbiBlocks2_BepInEx_Location>
         <!-- Prefix for locating Steamworks assembly -->
-        <SteamworksPrefix>$(ZumbiBlocks2_Location)\ZumbiBlocks2_Data\Managed\Facepunch.Steamworks</SteamworksPrefix>
-        <!-- If the config file failed to load, disable everything -->
-        <Enable_Task_FileValidation Condition="'$(Enable_Task_FileValidation)' == ''">false</Enable_Task_FileValidation>
-        <Enable_Task_PluginInstall Condition="'$(Enable_Task_PluginInstall)' == ''">false</Enable_Task_PluginInstall>
+        <SteamworksPrefix>$(ZumbiBlocks2_Install_Location)\ZumbiBlocks2_Data\Managed\Facepunch.Steamworks</SteamworksPrefix>
     </PropertyGroup>
 
 
@@ -88,48 +85,43 @@
 
     <!-- Verify game directory exists with complete BepInEx installation (Enable_Task_FileValidation == true) -->
     <Target
-        Condition="$(Enable_Task_FileValidation)"
+        Condition="$(Enable_Task_FileValidation) == true"
         Name="ValidateModLoaderInstallation"
         BeforeTargets="Build"
     >
-        <!-- If the ZumbiBlocks2_Location property has not been set, throw an error -->
+        <!-- If the ZumbiBlocks2_Install_Location directory does not exist, throw an error -->
         <Error
-            Condition="'$(ZumbiBlocks2_Location)' == ''"
-            Text="Please specify your Zumbi Blocks 2 installation directory."
-        />
-        <!-- If the ZumbiBlocks2_Location directory does not exist, throw an error -->
-        <Error
-            Condition="!Exists('$(ZumbiBlocks2_Location)')"
-            Text="Could not locate Zumbi Blocks 2 installation directory. Please check your ZumbiBlocks2_Location property and try again."
+            Condition="!Exists('$(ZumbiBlocks2_Install_Location)')"
+            Text="Could not locate Zumbi Blocks 2 installation directory. Please check your ZumbiBlocks2_Install_Location property and try again."
         />
         <!-- If the BepInEx directory is missing, throw an error -->
         <Error
-            Condition="!Exists('$(ZumbiBlocks2_Location)\BepInEx')"
+            Condition="!Exists('$(ZumbiBlocks2_BepInEx_Location)')"
             Text="Could not locate BepInEx installation. Please download BepInEx 5 from its repository: https://github.com/BepInEx/BepInEx/releases"
         />
         <!-- If the BepInEx core assembly is missing, throw an error -->
         <Error
-            Condition="!Exists('$(ZumbiBlocks2_Location)\BepInEx\core\BepInEx.Preloader.dll')"
+            Condition="!Exists('$(ZumbiBlocks2_BepInEx_Location)\core\BepInEx.Preloader.dll')"
             Text="BepInEx installation is corrupted. Please re-download BepInEx 5 from its repository: https://github.com/BepInEx/BepInEx/releases"
         />
     </Target>
 
     <!-- Automatically deploy to the plugins directory after building assembly (Enable_Task_PluginInstall == true) -->
     <Target
-        Condition="$(Enable_Task_PluginInstall)"
+        Condition="$(Enable_Task_PluginInstall) == true"
         Name="DeployToPluginsDirectory"
         AfterTargets="Build"
     >
         <!-- Copy newly-built assembly to BepInEx plugins directory -->
         <Copy
             SourceFiles="$(TargetDir)$(AssemblyName).dll"
-            DestinationFolder="$(ZumbiBlocks2_Location)\BepInEx\plugins\$(AssemblyName)"
+            DestinationFolder="$(ZumbiBlocks2_BepInEx_Location)\plugins\$(AssemblyName)"
         />
         <!-- Copy project assets to plugin's assets directory -->
         <Copy
             Condition="Exists('$(ProjectDir)Assets')"
             SourceFiles="@(ProjectAssets)"
-            DestinationFolder="$(ZumbiBlocks2_Location)\BepInEx\plugins\$(AssemblyName)\Assets\%(RecursiveDir)"
+            DestinationFolder="$(ZumbiBlocks2_BepInEx_Location)\plugins\$(AssemblyName)\Assets\%(RecursiveDir)"
             SkipUnchangedFiles="true"
         />
     </Target>

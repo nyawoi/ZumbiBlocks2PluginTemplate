@@ -17,7 +17,7 @@
             Optionally, set an environment variable named ZumbiBlocks2_Location to your
             game's install location, and never have to worry about this property again!
         -->
-        <ZumbiBlocks2_Location>$(ZumbiBlocks2_Location)</ZumbiBlocks2_Location>
+        <ZumbiBlocks2_Install_Location>$(ZumbiBlocks2_Install_Location)</ZumbiBlocks2_Install_Location>
 
         <!--
             Task: File Validation
