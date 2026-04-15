@@ -43,7 +43,7 @@
         <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" IncludeAssets="build" PrivateAssets="all"/>
         <PackageReference Include="BepInEx.Core" Version="5.4.21" IncludeAssets="compile" PrivateAssets="all" />
         <PackageReference Include="HarmonyX" Version="2.9.0" IncludeAssets="compile" PrivateAssets="all" />
-        <PackageReference Include="UnityEngine.Modules" Version="6000.2.8" IncludeAssets="compile" PrivateAssets="all"/>
+        <PackageReference Include="UnityEngine.Modules" Version="6000.3.10" IncludeAssets="compile" PrivateAssets="all"/>
     </ItemGroup>
 
     <!-- Reference Assemblies for .NET Framework 4.7.2 or newer -->
